@@ -3,19 +3,20 @@ package org.example.socialnetworkserver.services;
 import lombok.Setter;
 import org.example.socialnetworkserver.enteties.User;
 import org.example.socialnetworkserver.responses.BasicResponse;
+import org.example.socialnetworkserver.responses.TokenResponse;
 import org.example.socialnetworkserver.utils.JwtUtil;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthTokenService {
 
-    public  BasicResponse<String> validateTokenToUser(String token ){
-        boolean valid = JwtUtil.validateToken(token);//TODO check matches usestate userName
-        String message = "bad token";
-        if (valid){
-            message = JwtUtil.getTokensValue(token);
+    public TokenResponse validateToken(String cleanToken) {
+        boolean isValid = JwtUtil.validateToken(cleanToken);
+        String username = "";
+        if (isValid){
+            username = JwtUtil.getTokensValue(cleanToken);
         }
-        return new BasicResponse<>(valid, message);
-    }
 
+        return new TokenResponse(isValid, isValid ? "Token is valid" : "Token is invalid", isValid,username);
+    }
 }
